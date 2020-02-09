@@ -1,0 +1,15 @@
+---
+
+- name: check if vts-module is installed
+  stat:
+    path: "/usr/lib/nginx/modules/ngx_http_vhost_traffic_status_module_{{ openresty_vts_version }}.so"
+  register: check_module_vts_install
+
+- name: download module-vts binary
+  get_url:
+    url: "{{ repository_path_vts }}/\
+        ngx_http_vhost_traffic_status_module_{{ openresty_vts_version }}.so"
+    dest: "/usr/lib/nginx/modules/\
+          ngx_http_vhost_traffic_status_module_{{ openresty_vts_version }}.so"
+    mode: 0744
+  when: not check_module_vts_install.stat.exists

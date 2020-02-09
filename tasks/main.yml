@@ -1,0 +1,11 @@
+---
+
+- import_tasks: install_modsecurity_lib.yml
+
+- import_tasks: install_modsecurity_connector.yml
+
+- import_tasks: install_owasp_security_rules.yml
+
+- import_tasks: install_vts.yml
+
+- import_tasks: install_openresty.yml

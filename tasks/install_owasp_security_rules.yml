@@ -1,0 +1,28 @@
+---
+- name: "Check owasp-modsecurity-crs-{{ owasp_rules_version }}.tar.gz is present"
+  stat: path=/usr/local/owasp-modsecurity-crs-{{ owasp_rules_version }}.tar.gz
+  register: file
+
+- name: get OWASP security rules {{ owasp_rules_version }}
+  get_url:
+    url: "https://github.com/SpiderLabs/owasp-modsecurity-crs/\
+          archive/v{{ owasp_rules_version }}.tar.gz"
+    dest: /usr/local/owasp-modsecurity-crs-{{ owasp_rules_version }}.tar.gz
+    mode: 0744
+  when: file.stat.exists == "False"
+
+- name: unzip OWASP security rules
+  unarchive:
+    src: "/usr/local/owasp-modsecurity-crs-{{ owasp_rules_version }}.tar.gz"
+    dest: "/usr/local/"
+    remote_src: "yes"
+  when: file.stat.exists == "False"
+
+- name: rename crs-setup.conf.example file
+  copy:
+    remote_src: "yes"
+    src: "/usr/local/owasp-modsecurity-crs-{{ owasp_rules_version }}/\
+          crs-setup.conf.example"
+    dest: "/usr/local/owasp-modsecurity-crs-{{ owasp_rules_version }}/\
+          crs-setup.conf"
+  when: file.stat.exists == "False"

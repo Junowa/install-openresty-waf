@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: Runnerz
+  description: Role to install openresty waf
+  company: Thales Digital Factory
+
+  license: BSD
+
+  platforms:
+    - name: ubuntu
+      versions:
+        - 16.04
+
+  min_ansible_version: 2.4
+
+  galaxy_tags:
+    - openresty
+    - modsec

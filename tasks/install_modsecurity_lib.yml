@@ -1,0 +1,41 @@
+---
+
+- name: install modsecurity dependencies
+  apt:
+    name:
+      - libcurl4-openssl-dev
+      - libyajl-dev
+    state: present
+
+- name: check if Modsecurity library
+        for nginx version {{ openresty_modsec_version }} is installed
+  stat:
+    path: /opt/libmodsecurity.so.{{ libmodsecurity_version }}-{{ openresty_modsec_version }}
+  register: check_modsecurity_library_installation
+
+- name: download Modsecurity library
+  get_url:
+    url: "{{ repository_path }}/\
+        libmodsecurity.so.{{ libmodsecurity_version }}-{{ openresty_modsec_version }}"
+    dest: "/opt/libmodsecurity.so.{{ libmodsecurity_version }}-{{ openresty_modsec_version }}"
+    mode: 0744
+  environment:
+  when: not check_modsecurity_library_installation.stat.exists
+
+- name: create /usr/local/modsecurity directory
+  file:
+    path: /usr/local/{{ item }}
+    state: directory
+  with_items:
+    - modsecurity
+    - modsecurity/bin
+    - modsecurity/lib
+
+- name: create libmodsecurity.so.3 symlink
+  file:
+    src: /opt/libmodsecurity.so.{{ libmodsecurity_version }}-{{ openresty_modsec_version }}
+    dest: /usr/local/modsecurity/lib/{{ item }}
+    state: link
+  with_items:
+    - libmodsecurity.so
+    - libmodsecurity.so.3

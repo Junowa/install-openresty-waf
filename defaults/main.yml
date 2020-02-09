@@ -1,0 +1,14 @@
+---
+
+# oss installation params
+openresty_version: 1.15.8.1-1~xenial1
+
+# modsecurity installation params
+repository_path: "https://artifactory.thalesdigital.io/artifactory/list/generic-public/coreauto/openresty-modsecurity"
+openresty_modsec_version: 1.15.8.1~xenial
+libmodsecurity_version: 3.0.3
+owasp_rules_version: 3.0.0
+
+# vts installation params
+repository_path_vts: "https://artifactory.thalesdigital.io/artifactory/list/generic-public/coreauto/openresty-vts"
+openresty_vts_version: 1.15.8.1~xenial

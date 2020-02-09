@@ -1,0 +1,41 @@
+# @see https://github.com/github/gitignore/blob/master/Python.gitignore
+
+# OSX Specific files
+.DS_Store
+
+# Code editors related
+.atom
+.idea/
+.vscode/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Debug logs
+pytestdebug.clog
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Molecule
+
+.molecule
+.pytest_cache
+
+# ansible
+.galaxy_install_info

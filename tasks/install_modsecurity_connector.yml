@@ -1,0 +1,28 @@
+---
+- name: create modsec folder modsecurity_binary/
+  file:
+    path: /usr/lib/nginx/modules/modsecurity_binary/
+    state: directory
+    mode: 0744
+
+- name: check if Modsecurity connector for nginx
+        version {{ openresty_modsec_version }} is installed
+  stat:
+    path: "/usr/lib/nginx/modules/modsecurity_binary/\
+          ngx_http_modsecurity_module_{{ openresty_modsec_version }}.so"
+  register: check_modsecurity_connector_installation
+
+- name: download binary
+  get_url:
+    url: "{{ repository_path }}/\
+        ngx_http_modsecurity_module_{{ openresty_modsec_version }}.so"
+    dest: "/usr/lib/nginx/modules/modsecurity_binary/\
+          ngx_http_modsecurity_module_{{ openresty_modsec_version }}.so"
+    mode: 0744
+  when: not check_modsecurity_connector_installation.stat.exists
+
+- name: change modsecurity connector rights
+  file:
+    path: "/usr/lib/nginx/modules/modsecurity_binary/\
+          ngx_http_modsecurity_module_{{ openresty_modsec_version }}.so"
+    mode: 0744

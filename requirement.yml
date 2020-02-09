@@ -1,0 +1,5 @@
+---
+- src: git@gitlab.thalesdigital.io:shared-infra/ansible-roles/apt.git
+  scm: git
+  version: master
+  name: apt

@@ -1,0 +1,28 @@
+---
+
+- name: install dependencies (openresty and modsec)
+  apt:
+    name:
+      - software-properties-common
+      - gnupg
+      - libcurl3
+      - libgeoip1
+      - libyajl2
+
+
+- name: add openresty signing key
+  apt_key:
+    url: https://openresty.org/package/pubkey.gpg
+    state: present
+
+- name: add openresty repository
+  apt_repository:
+    repo: deb http://openresty.org/package/ubuntu {{ ansible_distribution_release }} main
+    state: present
+
+- name: install openresty
+  apt:
+    name: openresty={{ openresty_version }}
+    state: present
+    update_cache: "yes"
+  notify: restart openresty
