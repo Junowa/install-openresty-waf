@@ -1,0 +1,81 @@
+worker_processes 1;
+#/usr/local/openresty/nginx/logs/nginx.pid
+user root;
+
+{% if openresty_modsec_version is defined %}
+load_module /usr/lib/nginx/modules/modsecurity_binary/ngx_http_modsecurity_module_{{ openresty_modsec_version }}.so;
+{% endif %}
+{% if openresty_vts_version is defined %}
+load_module /usr/lib/nginx/modules/ngx_http_vhost_traffic_status_module_{{ openresty_vts_version }}.so;
+{% endif %}
+
+events {
+	worker_connections 1024;
+	# multi_accept on;
+}
+
+http {
+
+	##
+	# Basic Settings
+	##
+  log_format json '{"@timestamp": "$time_iso8601", "clientip":"$remote_addr", "x-forwarded-for": "$http_x_forwarded_for", "vhost": "$http_host", "duration": $request_time, "request": "$request", "response": "$status", "size": $bytes_sent, "handling": "$upstream_cache_status", "scheme": "$scheme"}';
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+	server_tokens off;
+
+	# server_names_hash_bucket_size 64;
+	# server_name_in_redirect off;
+
+	include mime.types;
+	default_type application/octet-stream;
+
+	##
+	# Gzip Settings
+	##
+
+	gzip on;
+	gzip_disable "msie6";
+
+  server {
+    listen       80;
+    server_name  localhost;
+
+    location / {
+        root   html;
+        index  index.html index.htm;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+    }
+}

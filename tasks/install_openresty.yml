@@ -26,3 +26,10 @@
     state: present
     update_cache: "yes"
   notify: restart openresty
+
+- name: copy openresty config
+  template:
+    src: nginx.conf.j2
+    dest: /usr/local/openresty/nginx/conf/nginx.conf
+  notify: restart openresty
+
